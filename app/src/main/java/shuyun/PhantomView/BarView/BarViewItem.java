@@ -6,8 +6,9 @@ package shuyun.PhantomView.BarView;
 public class BarViewItem {
 
     private String title;
-    private int width;
     private int height;
+    private int ItemColor;
+    private int titleColor;
     private Object other;
 
     public String getTitle() {
@@ -18,20 +19,28 @@ public class BarViewItem {
         this.title = title;
     }
 
-    public int getWidth() {
-        return width;
-    }
-
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
     public int getHeight() {
         return height;
     }
 
     public void setHeight(int height) {
         this.height = height;
+    }
+
+    public int getItemColor() {
+        return ItemColor;
+    }
+
+    public void setItemColor(int itemColor) {
+        ItemColor = itemColor;
+    }
+
+    public int getTitleColor() {
+        return titleColor;
+    }
+
+    public void setTitleColor(int titleColor) {
+        this.titleColor = titleColor;
     }
 
     public Object getOther() {
