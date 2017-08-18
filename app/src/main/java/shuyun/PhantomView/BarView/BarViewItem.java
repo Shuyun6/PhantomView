@@ -42,13 +42,4 @@ public class BarViewItem {
         this.other = other;
     }
 
-    @Override
-    public String toString() {
-        return "BarViewItem{" +
-                "title='" + title + '\'' +
-                ", width=" + width +
-                ", height=" + height +
-                ", other=" + other +
-                '}';
-    }
 }
