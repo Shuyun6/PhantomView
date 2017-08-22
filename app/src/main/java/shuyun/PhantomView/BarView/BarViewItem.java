@@ -9,6 +9,7 @@ public class BarViewItem {
     private int height;
     private int ItemColor;
     private int titleColor;
+    private int titleSize;
     private Object other;
 
     public String getTitle() {
@@ -41,6 +42,14 @@ public class BarViewItem {
 
     public void setTitleColor(int titleColor) {
         this.titleColor = titleColor;
+    }
+
+    public int getTitleSize() {
+        return titleSize;
+    }
+
+    public void setTitleSize(int titleSize) {
+        this.titleSize = titleSize;
     }
 
     public Object getOther() {
