@@ -115,11 +115,15 @@ public class BarView extends View {
                     barViewItem.setTitle(""+itemHeight[i]);
                 }
                 if (null != itemTitleColor && itemTitleColor.length > 0) {
+                    if(itemTitleColor[i] == 0)
+                        itemTitleColor[i] = itemAllTitleColor;
                     barViewItem.setTitleColor(itemTitleColor[i]);
                 }else{
                     barViewItem.setTitleColor(itemAllTitleColor);
                 }
                 if (null != itemColor && itemColor.length > 0) {
+                    if(itemColor[i] == 0)
+                        itemColor[i] = itemAllColor;
                     barViewItem.setItemColor(itemColor[i]);
                 }else{
                     barViewItem.setItemColor(itemAllColor);
@@ -151,8 +155,10 @@ public class BarView extends View {
             for (int i = 0; i < listOfBarViewItem.size(); i++) {
                 item = listOfBarViewItem.get(i);
                 paint.setColor(item.getItemColor());
-                canvas.drawRect(rightMargin + gap + (gap + itemAllWidth) * i, height - bottomMargin - item.getHeight(),
-                        rightMargin + gap + (gap + itemAllWidth) * i + itemAllWidth, height - bottomMargin, paint);
+                canvas.drawRect(rightMargin + gap + (gap + itemAllWidth) * i,
+                        height - bottomMargin - item.getHeight(),
+                        rightMargin + gap + (gap + itemAllWidth) * i + itemAllWidth,
+                        height - bottomMargin, paint);
             }
             for (int i = 0; i < listOfBarViewItem.size(); i++) {
                 item = listOfBarViewItem.get(i);
@@ -167,9 +173,12 @@ public class BarView extends View {
                         textLeftMargin = (itemAllWidth - textWidth)/2;
                     paint.setTextSize(size);
                     if(text.length() > textLimitCount)
-                        canvas.drawText(item.getTitle(), 0, textLimitCount, rightMargin + gap + (gap + itemAllWidth) * i + textLeftMargin, height - bottomMargin - item.getHeight(), paint);
+                        canvas.drawText(item.getTitle(), 0, textLimitCount,
+                                rightMargin + gap + (gap + itemAllWidth) * i + textLeftMargin,
+                                height - bottomMargin - item.getHeight() - 4, paint);
                     else
-                        canvas.drawText(item.getTitle(), rightMargin + gap + (gap + itemAllWidth) * i + textLeftMargin, height - bottomMargin - item.getHeight(), paint);
+                        canvas.drawText(item.getTitle(), rightMargin + gap + (gap + itemAllWidth) * i + textLeftMargin,
+                                height - bottomMargin - item.getHeight() - 4, paint);
                 }
             }
         }
@@ -196,46 +205,55 @@ public class BarView extends View {
 
     /**
      * quickly set items' color
+     * need invoke setItemHeight firstly
      * @param color
-     * @return <tt>true</tt> if this color array's length matches itemHeight's length
+     * @return <tt>false</tt> if itemHeight had not be initialized
      */
     public boolean setItemColor(int... color) {
-        if(null == itemHeight || itemHeight.length == 0 || itemHeight.length != color.length)
+        if(null == itemHeight || itemHeight.length == 0)
             return false;
-        itemColor = new int[color.length];
-        for(int i = 0; i < color.length; i++) {
-            itemColor[i] = color[i];
-        }
+        itemColor = new int[itemHeight.length];
+        if (color.length > itemHeight.length)
+            System.arraycopy(color, 0, itemColor, 0, itemHeight.length);
+        if (color.length <= itemHeight.length)
+            System.arraycopy(color, 0, itemColor, 0, color.length);
         return true;
     }
 
     /**
      * quickly set items' title
+     * need invoke setItemHeight firstly
      * @param title
-     * @return <tt>true</tt> if this title array's length matches itemHeight's length
+     * @return <tt>false</tt> if itemHeight had not be initialized
      */
     public boolean setItemTitle(String... title) {
-        if(null == itemHeight || itemHeight.length == 0 || itemHeight.length != title.length)
+        if(null == itemHeight || itemHeight.length == 0)
             return false;
-        itemTitle = new String[title.length];
-        for(int i = 0; i < title.length; i++) {
-            itemTitle[i] = title[i];
+        itemTitle = new String[itemHeight.length];
+        if (title.length > itemHeight.length)
+            System.arraycopy(title, 0, itemTitle, 0, itemHeight.length);
+        if (title.length <= itemHeight.length) {
+            System.arraycopy(title, 0, itemTitle, 0, title.length);
+            for(int i = title.length; i < itemHeight.length; i++)
+                title[i] = "";
         }
         return true;
     }
 
     /**
      * quickly set items' title color
+     * need invoke setItemHeight firstly
      * @param color
-     * @return <tt>true</tt> if this color array's length matches itemHeight's length
+     * @return <tt>false</tt> if itemHeight had not be initialized
      */
     public boolean setItemTitleColor(int... color) {
-        if(null == itemHeight || itemHeight.length == 0 || itemHeight.length != color.length)
+        if(null == itemHeight || itemHeight.length == 0)
             return false;
-        itemTitleColor = new int[color.length];
-        for(int i = 0; i < color.length; i++) {
-            itemTitleColor[i] = color[i];
-        }
+        itemTitleColor = new int[itemHeight.length];
+        if (color.length > itemHeight.length)
+            System.arraycopy(color, 0, itemTitleColor, 0, itemHeight.length);
+        if (color.length <= itemHeight.length)
+            System.arraycopy(color, 0, itemTitleColor, 0, color.length);
         return true;
     }
 
@@ -251,7 +269,7 @@ public class BarView extends View {
         isShowTitle = showTitle;
     }
 
-    public void setTitleSize(int titleSize) {
-        this.titleSize = titleSize;
+    public void setTitleTextSize(int size) {
+        this.titleSize = size;
     }
 }
