@@ -24,7 +24,13 @@ public class PhantomColor {
     public static final int Orange_500 = 0xFFff9800;
     public static final int DeepOrange_500 = 0xFFff5722;
     public static final int Brown_500 = 0xFF795548;
+
     public static final int Grey_500 = 0xFF9e9e9e;
+    public static final int Grey_400 = 0xFFbdbdbd;
+    public static final int Grey_300 = 0xFFe0e0e0;
+    public static final int Grey_200 = 0xFFeeeeee;
+    public static final int Grey_100 = 0xFFf5f5f5;
+
     public static final int BlueGrey_500 = 0xFF607d8b;
 
 }

@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -24,10 +25,11 @@ public class BarView extends View {
      * gap width between two items
      */
     private int gap = -1;
+    private int firstGap = 10;
     /**
      * Margin to each bounds
      */
-    private int leftMargin = 20, topMargin = 20, rightMargin = 20, bottomMargin = 20;
+    private int leftMargin = 80, topMargin = 40, rightMargin = 40, bottomMargin = 40;
     /**
      * list for setting each items
      */
@@ -36,11 +38,6 @@ public class BarView extends View {
      * count of items, limit the count of showing items
      */
     private int count = -1;
-    /**
-     * the largest height in bar view
-     */
-    private int scale = 0;
-    //simple mode
     /**
      * height of each items
      */
@@ -70,6 +67,9 @@ public class BarView extends View {
      */
     private boolean isShowTitle = false;
     private int titleSize = -1;
+    private int maxX;
+    private int maxY;
+    private int scale;
 
     public static final int GRAVITY_LEFT = 0;
     public static final int GRAVITY_TOP = 1;
@@ -78,6 +78,7 @@ public class BarView extends View {
 
     private Paint paint;
     private Handler handler;
+    private boolean first = true;
 
     public BarView(Context context) {
         super(context);
@@ -87,13 +88,14 @@ public class BarView extends View {
         super(context, attrs);
         paint = new Paint();
         handler = new Handler();
-
+        Log.e("test", "BarView");
     }
 
     /**
      * show a bar view after setting data for it
      */
-    public void show() {
+    private void process() {
+        Log.e("test", "show");
         if (null != itemHeight && itemHeight.length > 0) {
             if(count == -1)
                 count = listOfBarViewItem.size();
@@ -105,10 +107,16 @@ public class BarView extends View {
                 titleSize = (int) (0.2 * itemAllWidth);
             if(titleSize == 0)
                 titleSize = 16;
-
+            if (maxY == 0)
+                maxY = height - bottomMargin - topMargin;
+            if(scale == 0)
+                scale = (height - bottomMargin - topMargin) / 5;
             for(int i = 0; i < itemHeight.length; i++) {
                 BarViewItem barViewItem = new BarViewItem();
-                barViewItem.setHeight(itemHeight[i]);
+                int itemheight = itemHeight[i];
+                if(height != 0 )
+                    itemheight = itemheight * (height - topMargin - bottomMargin) / maxY;
+                barViewItem.setHeight(itemheight);
                 if (null != itemTitle && itemTitle.length > 0) {
                     barViewItem.setTitle(itemTitle[i]);
                 }else{
@@ -132,32 +140,44 @@ public class BarView extends View {
                 listOfBarViewItem.add(barViewItem);
             }
         }
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                postInvalidate();
-            }
-        });
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        Log.e("test", "measure");
         width = MeasureSpec.getSize(widthMeasureSpec);
         height = MeasureSpec.getSize(heightMeasureSpec);
+        Log.e("test", "measure "+width+":"+height);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        Log.e("test", "ondraw");
+        if(first){
+            first = false;
+            process();
+        }
+        paint.setColor(PhantomColor.Grey_300);
+        paint.setStrokeWidth(2);
+        paint.setTextSize(20);
+        // X line
+        for(int i = 0; i <= height / scale; i++) {
+            canvas.drawLine(leftMargin, height - bottomMargin - scale * i, width - rightMargin, height - bottomMargin - scale * i, paint);
+            canvas.drawText(""+(maxY/5)*i, leftMargin - 40,  height - bottomMargin - scale * i, paint);
+        }
+        // Y line
+        canvas.drawLine(leftMargin, topMargin, leftMargin, height - topMargin, paint);
+
         if(null != listOfBarViewItem){
             BarViewItem item;
             for (int i = 0; i < listOfBarViewItem.size(); i++) {
                 item = listOfBarViewItem.get(i);
                 paint.setColor(item.getItemColor());
-                canvas.drawRect(rightMargin + gap + (gap + itemAllWidth) * i,
+                canvas.drawRect(leftMargin + firstGap + gap + (gap + itemAllWidth) * i,
                         height - bottomMargin - item.getHeight(),
-                        rightMargin + gap + (gap + itemAllWidth) * i + itemAllWidth,
+                        leftMargin + firstGap + gap + (gap + itemAllWidth) * i + itemAllWidth,
                         height - bottomMargin, paint);
             }
             for (int i = 0; i < listOfBarViewItem.size(); i++) {
@@ -174,10 +194,10 @@ public class BarView extends View {
                     paint.setTextSize(size);
                     if(text.length() > textLimitCount)
                         canvas.drawText(item.getTitle(), 0, textLimitCount,
-                                rightMargin + gap + (gap + itemAllWidth) * i + textLeftMargin,
+                                leftMargin + firstGap + gap + (gap + itemAllWidth) * i + textLeftMargin,
                                 height - bottomMargin - item.getHeight() - 4, paint);
                     else
-                        canvas.drawText(item.getTitle(), rightMargin + gap + (gap + itemAllWidth) * i + textLeftMargin,
+                        canvas.drawText(item.getTitle(), leftMargin + firstGap + gap + (gap + itemAllWidth) * i + textLeftMargin,
                                 height - bottomMargin - item.getHeight() - 4, paint);
                 }
             }
@@ -271,5 +291,9 @@ public class BarView extends View {
 
     public void setTitleTextSize(int size) {
         this.titleSize = size;
+    }
+
+    public void setMaxY(int maxY) {
+        this.maxY = maxY;
     }
 }
