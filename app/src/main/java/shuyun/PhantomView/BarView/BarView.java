@@ -82,6 +82,7 @@ public class BarView extends View {
     private Paint paint;
     private Handler handler;
     private boolean first = true;
+    private int onMeasureCalledTimes = 0;
 
     public BarView(Context context) {
         super(context);
@@ -148,16 +149,38 @@ public class BarView extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        Log.e("test", "measure");
+        Log.i("test", "measure");
         width = MeasureSpec.getSize(widthMeasureSpec);
         height = MeasureSpec.getSize(heightMeasureSpec);
-        Log.e("test", "measure "+width+":"+height);
+        int wm = MeasureSpec.getMode(widthMeasureSpec);
+        int hm = MeasureSpec.getMode(heightMeasureSpec);
+        if(wm == MeasureSpec.AT_MOST)
+            Log.e("test", "width mode AT_MOST");
+        if(wm == MeasureSpec.EXACTLY)
+            Log.e("test", "width mode EXACTLY");
+        if(wm == MeasureSpec.UNSPECIFIED)
+            Log.e("test", "width mode UNSPECIFIED");
+        if(hm == MeasureSpec.AT_MOST)
+            Log.e("test", "height mode AT_MOST");
+        if(hm == MeasureSpec.EXACTLY)
+            Log.e("test", "height mode EXACTLY");
+        if(hm == MeasureSpec.UNSPECIFIED)
+            Log.e("test", "height mode UNSPECIFIED");
+        Log.e("test", "measure "+this.getWidth()+":"+this.getHeight());
+        onMeasureCalledTimes++;
+        Log.e("test", "times "+onMeasureCalledTimes);
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        Log.i("test", "onSizeChanged ");
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        Log.e("test", "ondraw");
+        Log.i("test", "ondraw");
         if(first){
             first = false;
             process();
@@ -166,11 +189,11 @@ public class BarView extends View {
         paint.setStrokeWidth(2);
         paint.setTextSize(20);
         // X line
-        for(int i = 0; i <= maxY / scaleY; i++) {
-            int y  = scaleY * (height - topMargin - bottomMargin) / maxY;
-            canvas.drawLine(leftMargin, height - bottomMargin - y * i, width - rightMargin, height - bottomMargin - y * i, paint);
-            canvas.drawText(""+scaleY*i, leftMargin - 40,  height - bottomMargin - y * i, paint);
-        }
+//        for(int i = 0; i <= maxY / scaleY; i++) {
+//            int y  = scaleY * (height - topMargin - bottomMargin) / maxY;
+//            canvas.drawLine(leftMargin, height - bottomMargin - y * i, width - rightMargin, height - bottomMargin - y * i, paint);
+//            canvas.drawText(""+scaleY*i, leftMargin - 40,  height - bottomMargin - y * i, paint);
+//        }
         // Y line
         canvas.drawLine(leftMargin, topMargin, leftMargin, height - topMargin, paint);
 
