@@ -54,6 +54,9 @@ public class BarView extends View {
      * title color of each items
      */
     private int[] itemTitleColor;
+    private String[] itemText;
+    private int[] itemTextSize;
+    private int[] itemTextColor;
     /**
      * gravity of whole bars, default is @GRAVITY_BOTTOM, means bars base on bottom and growth to top
      */
@@ -69,7 +72,7 @@ public class BarView extends View {
     private int titleSize = -1;
     private int maxX;
     private int maxY;
-    private int scale;
+    private int scaleX, scaleY;
 
     public static final int GRAVITY_LEFT = 0;
     public static final int GRAVITY_TOP = 1;
@@ -109,8 +112,8 @@ public class BarView extends View {
                 titleSize = 16;
             if (maxY == 0)
                 maxY = height - bottomMargin - topMargin;
-            if(scale == 0)
-                scale = (height - bottomMargin - topMargin) / 5;
+            if(scaleY == 0)
+                scaleY = maxY / 5;
             for(int i = 0; i < itemHeight.length; i++) {
                 BarViewItem barViewItem = new BarViewItem();
                 int itemheight = itemHeight[i];
@@ -163,9 +166,10 @@ public class BarView extends View {
         paint.setStrokeWidth(2);
         paint.setTextSize(20);
         // X line
-        for(int i = 0; i <= height / scale; i++) {
-            canvas.drawLine(leftMargin, height - bottomMargin - scale * i, width - rightMargin, height - bottomMargin - scale * i, paint);
-            canvas.drawText(""+(maxY/5)*i, leftMargin - 40,  height - bottomMargin - scale * i, paint);
+        for(int i = 0; i <= maxY / scaleY; i++) {
+            int y  = scaleY * (height - topMargin - bottomMargin) / maxY;
+            canvas.drawLine(leftMargin, height - bottomMargin - y * i, width - rightMargin, height - bottomMargin - y * i, paint);
+            canvas.drawText(""+scaleY*i, leftMargin - 40,  height - bottomMargin - y * i, paint);
         }
         // Y line
         canvas.drawLine(leftMargin, topMargin, leftMargin, height - topMargin, paint);
@@ -178,7 +182,7 @@ public class BarView extends View {
                 canvas.drawRect(leftMargin + firstGap + gap + (gap + itemAllWidth) * i,
                         height - bottomMargin - item.getHeight(),
                         leftMargin + firstGap + gap + (gap + itemAllWidth) * i + itemAllWidth,
-                        height - bottomMargin, paint);
+                        height - bottomMargin - 4, paint);
             }
             for (int i = 0; i < listOfBarViewItem.size(); i++) {
                 item = listOfBarViewItem.get(i);
@@ -277,11 +281,44 @@ public class BarView extends View {
         return true;
     }
 
+    private boolean setItemText(String... text) {
+        if(null == itemHeight || itemHeight.length == 0)
+            return false;
+        itemText = new String[itemHeight.length];
+        if (text.length > itemHeight.length)
+            System.arraycopy(text, 0, itemText, 0, itemHeight.length);
+        if (text.length <= itemHeight.length)
+            System.arraycopy(text, 0, itemText, 0, text.length);
+        return true;
+    }
+
+    private boolean setItemTextSize(int... size) {
+        if(null == itemHeight || itemHeight.length == 0)
+            return false;
+        itemTextSize = new int[itemHeight.length];
+        if (size.length > itemHeight.length)
+            System.arraycopy(size, 0, itemTextSize, 0, itemHeight.length);
+        if (size.length <= itemHeight.length)
+            System.arraycopy(size, 0, itemTextSize, 0, size.length);
+        return true;
+    }
+
+    private boolean setItemTextColor(int... color) {
+        if(null == itemHeight || itemHeight.length == 0)
+            return false;
+        itemTextColor = new int[itemHeight.length];
+        if (color.length > itemHeight.length)
+            System.arraycopy(color, 0, itemTextColor, 0, itemHeight.length);
+        if (color.length <= itemHeight.length)
+            System.arraycopy(color, 0, itemTextColor, 0, color.length);
+        return true;
+    }
+
     public void setGap(int gap) {
         this.gap = gap;
     }
 
-    public void setitemAllWidth(int itemAllWidth) {
+    public void setItemAllWidth(int itemAllWidth) {
         this.itemAllWidth = itemAllWidth;
     }
 
@@ -295,5 +332,9 @@ public class BarView extends View {
 
     public void setMaxY(int maxY) {
         this.maxY = maxY;
+    }
+
+    public void setScaleY(int scaleY) {
+        this.scaleY = scaleY;
     }
 }
