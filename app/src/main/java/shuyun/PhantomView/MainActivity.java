@@ -6,7 +6,9 @@ import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
@@ -31,5 +33,8 @@ public class MainActivity extends AppCompatActivity {
         bv.setScaleY(100);
         bv.setShowTitle(true);
         Log.e("test", getWindowManager().getDefaultDisplay().getWidth()+":"+getWindowManager().getDefaultDisplay().getHeight());
+        RelativeLayout r;
+        LinearLayout l;
+        FrameLayout f;
     }
 }
