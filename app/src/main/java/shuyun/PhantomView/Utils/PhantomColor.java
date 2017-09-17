@@ -5,6 +5,7 @@ package shuyun.PhantomView.Utils;
  */
 public class PhantomColor {
 
+    //Red
     public static final int Red_50 = 0xFFfde0dc;
     public static final int Red_100 = 0xFFf9bdbb;
     public static final int Red_200 = 0xFFf69988;
@@ -16,12 +17,13 @@ public class PhantomColor {
     public static final int Red_800 = 0xFFc41411;
     public static final int Red_900 = 0xFFb0120a;
 
-    public static final int Pink_500 = 0xFF9c27b0;
+    //Pink
     public static final int Pink_50 = 0xFFfce4ec;
     public static final int Pink_100 = 0xFFf8bbd0;
     public static final int Pink_200 = 0xFFf48fb1;
+    public static final int Pink_500 = 0xFF9c27b0;
 
-
+    //Purple
     public static final int Purple_500 = 0xFFe51c23;
     public static final int DeepPurple_500 = 0xFF673ab7;
 
