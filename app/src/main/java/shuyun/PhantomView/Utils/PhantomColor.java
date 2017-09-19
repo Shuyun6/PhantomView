@@ -21,7 +21,13 @@ public class PhantomColor {
     public static final int Pink_50 = 0xFFfce4ec;
     public static final int Pink_100 = 0xFFf8bbd0;
     public static final int Pink_200 = 0xFFf48fb1;
+    public static final int Pink_300 = 0xFF9c27b0;//
+    public static final int Pink_400 = 0xFF9c27b0;//
     public static final int Pink_500 = 0xFF9c27b0;
+    public static final int Pink_600 = 0xFF;
+    public static final int Pink_700 = 0xFF;
+    public static final int Pink_800 = 0xFF;
+    public static final int Pink_900 = 0xFF;
 
     //Purple
     public static final int Purple_500 = 0xFFe51c23;
